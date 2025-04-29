@@ -1,30 +1,31 @@
-using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private const float PlayerHeight = 2;
+    
     [Header("Misc")] 
     [SerializeField] private Transform orientation;
-    private Rigidbody _rb;
-    private const float PlayerHeight = 2f;
-    private Vector3 _moveDir;
-    private float _hInput, _vInput;
+    
+    [Header("Movement")] 
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float moveMultiplier;
     
     [Header("Keybinds")]
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     
-    [Header("Movement")]
-    [SerializeField] private float moveSpeed = 5;
-    [SerializeField] private float accelSpeed = 100;
-    
-    [Header("Jumping")]
-    [SerializeField] private float jumpForce = 3;
-    [SerializeField] private float jumpCooldown;
-    [SerializeField] private float airMultiplier;
+    [Header("Ground Check & Jumping")]
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private bool isGrounded;
     [SerializeField] private float groundDrag;
-    [SerializeField] private bool _canJump;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float jumpCooldown;
+    [SerializeField] private float airMultiplier;
+    private bool _canJump;
+    
+    private float _hInput, _vInput;
+    private Vector3 _moveDir;
+    private Rigidbody _rb;
 
     private void Start()
     {
@@ -33,55 +34,54 @@ public class PlayerMovement : MonoBehaviour
         
         _canJump = true;
     }
-    
+
     private void Update()
     {
-        isGrounded = MovementHelper.GroundCheck(transform, groundLayer, PlayerHeight);
-        if(isGrounded)
-            _rb.linearDamping = groundDrag;
-        else _rb.linearDamping = 0;
+        ControlSpeed();
+        (_hInput, _vInput) = PlayerHelper.GetWASDInputs();
+        isGrounded = PlayerHelper.GroundCheck(transform, groundLayer, PlayerHeight);
 
-        (_hInput, _vInput) = MovementHelper.GetInputs();
-        ManageSpeed();
+        _rb.linearDamping = isGrounded ? groundDrag : 0;
 
         if (Input.GetKeyDown(jumpKey) && _canJump && isGrounded)
+        {
+            _canJump = false;
             Jump();
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
     }
 
-    private void FixedUpdate() => Move();
-    private void Move()
+    private void FixedUpdate() => MovePlayer();
+    private void MovePlayer()
     {
         _moveDir = orientation.forward * _vInput + orientation.right * _hInput;
-
+        
         switch (isGrounded)
         {
             case true:
-                _rb.AddForce(_moveDir.normalized * (moveSpeed * accelSpeed), ForceMode.Force);
+                _rb.AddForce(_moveDir.normalized * (moveSpeed * moveMultiplier), ForceMode.Force);
                 break;
             case false:
-                _rb.AddForce(_moveDir.normalized * (moveSpeed * accelSpeed * airMultiplier), ForceMode.Force);
+                _rb.AddForce(_moveDir.normalized * (moveSpeed * moveMultiplier * airMultiplier), ForceMode.Force);
                 break;
         }
     }
 
-    private void ManageSpeed()
+    private void ControlSpeed()
     {
-        var flatVel = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
-
-        if (flatVel.magnitude > moveSpeed)
+        //limit speed so it doesnt go over moveSpeed value
+        var flatVelo = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
+        if (flatVelo.magnitude > moveSpeed)
         {
-            var limitedVel = flatVel.normalized * moveSpeed;
-            _rb.velocity = new Vector3(limitedVel.x, _rb.velocity.y, limitedVel.z);
+            var limitedVelo = flatVelo.normalized * moveSpeed;
+            _rb.linearVelocity = new Vector3(limitedVelo.x, _rb.linearVelocity.y, limitedVelo.z);
         }
     }
 
     private void Jump()
     {
-
-        _rb.velocity = new Vector3(_moveDir.x, 0, _moveDir.z);
+        _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
         _rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-        _canJump = false;
-        Invoke(nameof(ResetJump), jumpCooldown);
     }
 
     private void ResetJump()
