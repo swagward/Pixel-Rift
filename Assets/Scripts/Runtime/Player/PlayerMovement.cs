@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
     
     [Header("Misc")] 
     [SerializeField] private Transform orientation;
+    public Transform lastCheckPoint;
     
     [Header("Movement")] 
     [SerializeField] private float moveSpeed;
@@ -49,6 +50,8 @@ public class PlayerMovement : MonoBehaviour
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
         }
+        
+        if(Input.GetKeyDown(KeyCode.E)) Die();
     }
 
     private void FixedUpdate() => MovePlayer();
@@ -87,5 +90,10 @@ public class PlayerMovement : MonoBehaviour
     private void ResetJump()
     {
         _canJump = true;
+    }
+
+    private void Die()
+    {
+        this.transform.position = lastCheckPoint.position;
     }
 }
