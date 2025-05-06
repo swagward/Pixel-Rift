@@ -58,7 +58,6 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         _moveDir = orientation.forward * _vInput + orientation.right * _hInput;
-        
         switch (isGrounded)
         {
             case true:
