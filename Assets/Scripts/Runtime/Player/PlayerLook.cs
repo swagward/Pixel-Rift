@@ -15,6 +15,8 @@ public class PlayerLook : MonoBehaviour
 
     private void Update()
     {
+        if (PlayerMovement.IsDead) return;
+        
         var (mouseX, mouseY) = PlayerHelper.GetMouseInputs(sensitivity);
 
         _yRot += mouseX;

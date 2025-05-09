@@ -7,6 +7,8 @@ public class PlayerAttack : MonoBehaviour
     
     private void Update()
     {
+        if (PlayerMovement.IsDead) return;
+        
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             var projectile  = Instantiate(projectilePrefab, firePos.transform.position, firePos.rotation);
