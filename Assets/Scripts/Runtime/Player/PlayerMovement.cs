@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private const float PlayerHeight = 2;
+    public static bool IsDead = false;
     
     [Header("Misc")] 
     [SerializeField] private Transform orientation;
@@ -23,6 +24,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpCooldown;
     [SerializeField] private float airMultiplier;
     private bool _canJump;
+
+    [Header("Death shit idfk")] 
+    [SerializeField] private GameObject gameUI;
+    [SerializeField] private GameObject deathUI;
     
     private float _hInput, _vInput;
     private Vector3 _moveDir;
@@ -38,6 +43,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (IsDead) return;
+        
         ControlSpeed();
         (_hInput, _vInput) = PlayerHelper.GetWASDInputs();
         isGrounded = PlayerHelper.GroundCheck(transform, groundLayer, PlayerHeight);
@@ -50,11 +57,15 @@ public class PlayerMovement : MonoBehaviour
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
         }
-        
-        if(Input.GetKeyDown(KeyCode.E)) Die();
     }
 
-    private void FixedUpdate() => MovePlayer();
+    private void FixedUpdate()
+    {
+        if(IsDead) return;
+        
+        MovePlayer();
+    }
+        
     private void MovePlayer()
     {
         _moveDir = orientation.forward * _vInput + orientation.right * _hInput;
@@ -86,13 +97,33 @@ public class PlayerMovement : MonoBehaviour
         _rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
 
-    private void ResetJump()
+    private void ResetJump() => _canJump = true;
+    
+    private void OnTriggerEnter(Collider other)
     {
-        _canJump = true;
+        if (other.gameObject.CompareTag("Kill Zone"))
+            Die();
     }
-
+    
     private void Die()
     {
+        IsDead = true;
+        gameUI.SetActive(false);
+        deathUI.SetActive(true);
+        
+        //unlock mouse
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    public void Respawn()
+    {
+        IsDead = false;
+        gameUI.SetActive(true);
+        deathUI.SetActive(false);
         this.transform.position = lastCheckPoint.position;
+        
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 }
