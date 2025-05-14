@@ -7,105 +7,100 @@ public class PlayerMovement : MonoBehaviour
     
     [Header("Misc")] 
     [SerializeField] private Transform orientation;
+    public PlayerHealth health;
     public Transform lastCheckPoint;
     
     [Header("Movement")] 
     [SerializeField] private float moveSpeed;
     [SerializeField] private float moveMultiplier;
+    [SerializeField] private float airMultiplier;
+    
+    [Header("Jumping")]
+    [SerializeField] private float jumpForce;
+    [SerializeField] private bool isGrounded;
+    [SerializeField] private float groundDrag;
+    [SerializeField] private float airDrag;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private float detectionRadius;
     
     [Header("Keybinds")]
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     
-    [Header("Ground Check & Jumping")]
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private bool isGrounded;
-    [SerializeField] private float groundDrag;
-    [SerializeField] private float jumpForce;
-    [SerializeField] private float jumpCooldown;
-    [SerializeField] private float airMultiplier;
-    private bool _canJump;
-
     [Header("Death shit idfk")] 
     [SerializeField] private GameObject gameUI;
     [SerializeField] private GameObject deathUI;
     
     private float _hInput, _vInput;
-    private Vector3 _moveDir;
+    private Vector3 _moveDir, _slopeMoveDir;
     private Rigidbody _rb;
-
+    private RaycastHit _slopeHit;
+    
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _rb.freezeRotation = true;
-        
-        _canJump = true;
+     
     }
 
     private void Update()
     {
         if (IsDead) return;
-        
-        ControlSpeed();
+
+        // input/movement dir
+        isGrounded = PlayerHelper.GroundCheck(this.transform, groundLayer, detectionRadius);
         (_hInput, _vInput) = PlayerHelper.GetWASDInputs();
-        isGrounded = PlayerHelper.GroundCheck(transform, groundLayer, PlayerHeight);
+        _moveDir = orientation.forward * _vInput + orientation.right * _hInput;
+        
+        _slopeMoveDir = Vector3.ProjectOnPlane(_moveDir, _slopeHit.normal);
+        
+        // drag control
+        _rb.linearDamping = isGrounded ? groundDrag : airDrag;
 
-        _rb.linearDamping = isGrounded ? groundDrag : 0;
-
-        if (Input.GetKeyDown(jumpKey) && _canJump && isGrounded)
-        {
-            _canJump = false;
+        if (Input.GetKeyDown(jumpKey) && isGrounded)
             Jump();
-            Invoke(nameof(ResetJump), jumpCooldown);
-        }
     }
 
     private void FixedUpdate()
     {
         if(IsDead) return;
         
-        MovePlayer();
-    }
-        
-    private void MovePlayer()
-    {
-        _moveDir = orientation.forward * _vInput + orientation.right * _hInput;
         switch (isGrounded)
         {
-            case true:
-                _rb.AddForce(_moveDir.normalized * (moveSpeed * moveMultiplier), ForceMode.Force);
+            case true when !OnSlope():
+                _rb.AddForce(_moveDir.normalized * (moveSpeed * moveMultiplier), ForceMode.Acceleration);
+                break;
+            case true when OnSlope():
+                _rb.AddForce(_slopeMoveDir.normalized * (moveSpeed * moveMultiplier), ForceMode.Acceleration);
                 break;
             case false:
-                _rb.AddForce(_moveDir.normalized * (moveSpeed * moveMultiplier * airMultiplier), ForceMode.Force);
+                _rb.AddForce(_moveDir.normalized * (moveSpeed * moveMultiplier * airMultiplier), ForceMode.Acceleration);
                 break;
         }
     }
-
-    private void ControlSpeed()
-    {
-        //limit speed so it doesnt go over moveSpeed value
-        var flatVelo = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
-        if (flatVelo.magnitude > moveSpeed)
-        {
-            var limitedVelo = flatVelo.normalized * moveSpeed;
-            _rb.linearVelocity = new Vector3(limitedVelo.x, _rb.linearVelocity.y, limitedVelo.z);
-        }
-    }
-
+    
     private void Jump()
     {
-        _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
         _rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
 
-    private void ResetJump() => _canJump = true;
+    private bool OnSlope()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out _slopeHit, PlayerHeight * 0.5f + 0.5f))
+        {
+            //object normal is diagonal (therefore slope)
+            return _slopeHit.normal != Vector3.up;
+        }
+        return false;
+    }
     
     private void OnTriggerEnter(Collider other)
     {
+        //player collisions (win, death, coin, enemy hit, etc)
         if (other.gameObject.CompareTag("Kill Zone"))
             Die();
     }
     
-    private void Die()
+    public void Die()
     {
         IsDead = true;
         gameUI.SetActive(false);
