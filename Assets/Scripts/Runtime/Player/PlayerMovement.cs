@@ -98,6 +98,7 @@ public class PlayerMovement : MonoBehaviour
         //player collisions (win, death, coin, enemy hit, etc)
         if (other.gameObject.CompareTag("Kill Zone"))
             Die();
+        
     }
     
     public void Die()

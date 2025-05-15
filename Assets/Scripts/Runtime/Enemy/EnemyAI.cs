@@ -109,7 +109,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    public void Hit()
+    private void Hit()
     {
         if (_inAttackRange)
         {
