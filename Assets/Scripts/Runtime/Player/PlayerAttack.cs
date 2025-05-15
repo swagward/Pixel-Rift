@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour
@@ -8,8 +9,8 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private GameObject projectilePrefab;
     
     private const float MaxMana = 100;
-    [SerializeField] private float currentMana;
-    [SerializeField] private Slider manaSlider;
+    public float currentMana;
+    public Slider manaSlider;
 
     [SerializeField] private BaseProjectile.MagicAttack[] attacks;
     [SerializeField] private int currentAttackIndex = 0;

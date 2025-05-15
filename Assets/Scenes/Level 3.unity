@@ -964,6 +964,17 @@ Transform:
   - {fileID: 624381113}
   m_Father: {fileID: 1374805794}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &551567131 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4978492222089496754, guid: c95e8cf7dcb5ad445b34df6aad14f28e, type: 3}
+  m_PrefabInstance: {fileID: 1727658613}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ec025910e5644c9b52dd16d62885f44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &624381112
 GameObject:
   m_ObjectHideFlags: 0
@@ -1423,6 +1434,7 @@ GameObject:
   - component: {fileID: 821935849}
   - component: {fileID: 821935852}
   - component: {fileID: 821935853}
+  - component: {fileID: 821935854}
   m_Layer: 0
   m_Name: RobotEnemy (1)
   m_TagString: Enemy
@@ -1467,6 +1479,7 @@ MonoBehaviour:
   hitSFX: {fileID: 0}
   enemyHealth: 30
   isAlive: 0
+  anim: {fileID: 0}
   knockbackForce: 15
   damage: 10
   agent: {fileID: 0}
@@ -1624,6 +1637,28 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &821935854
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 821935848}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8037264d40ae5d84995313b8d65b74fa, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &836774223
 GameObject:
   m_ObjectHideFlags: 0
@@ -1764,6 +1799,7 @@ GameObject:
   - component: {fileID: 940497020}
   - component: {fileID: 940497023}
   - component: {fileID: 940497024}
+  - component: {fileID: 940497025}
   m_Layer: 0
   m_Name: RobotEnemy (3)
   m_TagString: Enemy
@@ -1808,6 +1844,7 @@ MonoBehaviour:
   hitSFX: {fileID: 0}
   enemyHealth: 30
   isAlive: 0
+  anim: {fileID: 0}
   knockbackForce: 15
   damage: 10
   agent: {fileID: 0}
@@ -1967,6 +2004,28 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &940497025
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940497019}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8037264d40ae5d84995313b8d65b74fa, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &965421019
 GameObject:
   m_ObjectHideFlags: 0
@@ -2378,28 +2437,20 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7270032992970446, guid: eec0be96629c709429ec2e48273bd6cf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 551567131}
+    - target: {fileID: 7270032992970446, guid: eec0be96629c709429ec2e48273bd6cf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Respawn
+      objectReference: {fileID: 0}
     - target: {fileID: 1927786044227953243, guid: eec0be96629c709429ec2e48273bd6cf, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1927786044227953243, guid: eec0be96629c709429ec2e48273bd6cf, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1980468460548028808, guid: eec0be96629c709429ec2e48273bd6cf, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1980468460548028808, guid: eec0be96629c709429ec2e48273bd6cf, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1980468460548028808, guid: eec0be96629c709429ec2e48273bd6cf, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1980468460548028808, guid: eec0be96629c709429ec2e48273bd6cf, type: 3}
-      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2586499510207148922, guid: eec0be96629c709429ec2e48273bd6cf, type: 3}
@@ -2739,6 +2790,7 @@ GameObject:
   - component: {fileID: 1371400757}
   - component: {fileID: 1371400760}
   - component: {fileID: 1371400761}
+  - component: {fileID: 1371400762}
   m_Layer: 0
   m_Name: RobotEnemy (2)
   m_TagString: Enemy
@@ -2783,6 +2835,7 @@ MonoBehaviour:
   hitSFX: {fileID: 0}
   enemyHealth: 30
   isAlive: 0
+  anim: {fileID: 0}
   knockbackForce: 15
   damage: 10
   agent: {fileID: 0}
@@ -2940,6 +2993,28 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &1371400762
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1371400756}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8037264d40ae5d84995313b8d65b74fa, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1374805793
 GameObject:
   m_ObjectHideFlags: 0
@@ -3644,6 +3719,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 783337026}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1857830237
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4415707725894256657, guid: e58ce5b9ee22c104a9ae80028f0cb456, type: 3}
+      propertyPath: m_Name
+      value: Checkpoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565218344022095500, guid: e58ce5b9ee22c104a9ae80028f0cb456, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.1708121
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565218344022095500, guid: e58ce5b9ee22c104a9ae80028f0cb456, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565218344022095500, guid: e58ce5b9ee22c104a9ae80028f0cb456, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.8935931
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565218344022095500, guid: e58ce5b9ee22c104a9ae80028f0cb456, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565218344022095500, guid: e58ce5b9ee22c104a9ae80028f0cb456, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565218344022095500, guid: e58ce5b9ee22c104a9ae80028f0cb456, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565218344022095500, guid: e58ce5b9ee22c104a9ae80028f0cb456, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565218344022095500, guid: e58ce5b9ee22c104a9ae80028f0cb456, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565218344022095500, guid: e58ce5b9ee22c104a9ae80028f0cb456, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565218344022095500, guid: e58ce5b9ee22c104a9ae80028f0cb456, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e58ce5b9ee22c104a9ae80028f0cb456, type: 3}
 --- !u!1 &1870030602
 GameObject:
   m_ObjectHideFlags: 0
@@ -7846,6 +7978,7 @@ GameObject:
   - component: {fileID: 8064152055307016731}
   - component: {fileID: 8064152055307016732}
   - component: {fileID: 8064152055307016733}
+  - component: {fileID: 8064152055307016734}
   m_Layer: 0
   m_Name: RobotEnemy
   m_TagString: Enemy
@@ -8535,6 +8668,7 @@ MonoBehaviour:
   hitSFX: {fileID: 0}
   enemyHealth: 30
   isAlive: 0
+  anim: {fileID: 0}
   knockbackForce: 15
   damage: 10
   agent: {fileID: 0}
@@ -8696,6 +8830,28 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &8064152055307016734
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7251445473800601763}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8037264d40ae5d84995313b8d65b74fa, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!33 &8103877042241077034
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -9928,3 +10084,4 @@ SceneRoots:
   - {fileID: 8838905155245188299}
   - {fileID: 1217434538}
   - {fileID: 511180347}
+  - {fileID: 1857830237}
