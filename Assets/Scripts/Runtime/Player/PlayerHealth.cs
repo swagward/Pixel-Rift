@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
     private PlayerMovement _player;
     private const int MaxHealth = 100;
-    public int currentHealth;
+    [SerializeField] private int currentHealth;
+    [SerializeField] private Slider healthSlider;
 
     private void Start()
     {
@@ -15,6 +17,7 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        healthSlider.value = currentHealth;
         //sfx too
         
         if(currentHealth <= 0)

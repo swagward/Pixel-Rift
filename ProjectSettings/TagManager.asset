@@ -6,6 +6,9 @@ TagManager:
   tags:
   - NarrationPoint
   - Kill Zone
+  - Projectile
+  - Enemy
+  - Win Zone
   layers:
   - Default
   - TransparentFX

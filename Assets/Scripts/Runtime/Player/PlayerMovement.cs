@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -26,9 +27,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("Keybinds")]
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     
-    [Header("Death shit idfk")] 
-    [SerializeField] private GameObject gameUI;
+    [Header("Interfaces")] 
+    [SerializeField] private GameObject playerUI;
     [SerializeField] private GameObject deathUI;
+    [SerializeField] private GameObject winUI;
     
     private float _hInput, _vInput;
     private Vector3 _moveDir, _slopeMoveDir;
@@ -98,14 +100,28 @@ public class PlayerMovement : MonoBehaviour
         //player collisions (win, death, coin, enemy hit, etc)
         if (other.gameObject.CompareTag("Kill Zone"))
             Die();
-        
+
+        if (other.gameObject.CompareTag("Win Zone"))
+            Win();
+
     }
     
     public void Die()
     {
         IsDead = true;
-        gameUI.SetActive(false);
+        playerUI.SetActive(false);
         deathUI.SetActive(true);
+        
+        //unlock mouse
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+    
+    private void Win()
+    {
+        IsDead = true;
+        playerUI.SetActive(false);
+        winUI.SetActive(true);
         
         //unlock mouse
         Cursor.lockState = CursorLockMode.None;
@@ -115,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
     public void Respawn()
     {
         IsDead = false;
-        gameUI.SetActive(true);
+        playerUI.SetActive(true);
         deathUI.SetActive(false);
         this.transform.position = lastCheckPoint.position;
         

@@ -7,7 +7,8 @@ using Random = UnityEngine.Random;
 
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] private AudioSource zombieSFX;
+    [SerializeField] private AudioSource hitSFX;
+    [SerializeField] private int enemyHealth;
     public bool isAlive;
     
     [Header("Attacking")] 
@@ -38,7 +39,7 @@ public class EnemyAI : MonoBehaviour
     {
         isAlive = true;
 
-        zombieSFX = GetComponent<AudioSource>();
+        hitSFX = GetComponent<AudioSource>();
         //anim = GetComponentInChildren<Animator>();
         agent = GetComponent<NavMeshAgent>();
         playerObj = GameObject.Find("PlayerRoot");
@@ -50,7 +51,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (PlayerMovement.IsDead || !isAlive) return;
         
-        transform.position = new Vector3(transform.position.x, 0.675f, transform.position.z);
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         
         //Check player for sight/attack range
         _inSightRange = Physics.CheckSphere(transform.position, sightRange, player);
@@ -69,8 +70,7 @@ public class EnemyAI : MonoBehaviour
         if(!_walkPointSet)
             FindWalkPoint();
         else
-            Debug.Log("Moving");
-           //agent.SetDestination(walkTo);
+           agent.SetDestination(walkTo);
 
         var dstToWalkPoint = transform.position - walkTo;
         if (dstToWalkPoint.magnitude < 1f)
@@ -91,7 +91,7 @@ public class EnemyAI : MonoBehaviour
 
     private void ChasePlayer()
     {
-        //agent.SetDestination(playerObj.transform.position);
+        agent.SetDestination(playerObj.transform.position);
         Debug.Log("Chasing");
     }
 
@@ -121,15 +121,24 @@ public class EnemyAI : MonoBehaviour
         Invoke(nameof(ResetAttack), timeBetweenAttacks);
     }
 
-    public void Die()
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.gameObject.CompareTag("Projectile")) return;
+        
+        var projectile = other.GetComponent<BaseProjectile>();
+        enemyHealth -= projectile.damage;
+        
+        if(enemyHealth <= 0)
+            Die();
+    }
+
+    private void Die()
     {
         Destroy(agent);
         //anim.SetTrigger("Death");
-        Destroy(this.gameObject, 3);
+        Destroy(this.gameObject);
         isAlive = false;
-        
-        if(Random.value > 0.5f)
-            zombieSFX.Play();
+        hitSFX.Play();
     }
 
     private void ResetAttack()
