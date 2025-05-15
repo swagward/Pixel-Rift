@@ -68,6 +68,8 @@ public class EnemyAI : MonoBehaviour
 
     private void Idle()
     {
+        if (agent is null) return;
+        
         anim.SetBool("Idle", true);
         if(!_walkPointSet)
             FindWalkPoint();
@@ -93,6 +95,8 @@ public class EnemyAI : MonoBehaviour
 
     private void ChasePlayer()
     {
+        if (agent is null) return;
+        
         anim.SetBool("Idle", false);
         agent.SetDestination(playerObj.transform.position);
         Debug.Log("Chasing");
@@ -101,6 +105,7 @@ public class EnemyAI : MonoBehaviour
     private void AttackPlayer()
     {
         //Stop enemy moving when attacking
+        if (agent is null) return;
         agent.SetDestination(transform.position);
         transform.LookAt(playerObj.transform);
 

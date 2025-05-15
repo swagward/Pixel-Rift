@@ -39,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
     
     private void Start()
     {
+        IsDead = false;
         _rb = GetComponent<Rigidbody>();
         _rb.freezeRotation = true;
      
