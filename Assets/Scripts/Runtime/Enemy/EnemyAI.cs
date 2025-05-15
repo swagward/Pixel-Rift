@@ -10,6 +10,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private AudioSource hitSFX;
     [SerializeField] private int enemyHealth;
     public bool isAlive;
+    public Animator anim;
     
     [Header("Attacking")] 
     [SerializeField] private float knockbackForce;
@@ -40,7 +41,7 @@ public class EnemyAI : MonoBehaviour
         isAlive = true;
 
         hitSFX = GetComponent<AudioSource>();
-        //anim = GetComponentInChildren<Animator>();
+        anim = GetComponentInChildren<Animator>();
         agent = GetComponent<NavMeshAgent>();
         playerObj = GameObject.Find("PlayerRoot");
         playerRB = GameObject.Find("PlayerRoot").GetComponent<Rigidbody>();
@@ -67,6 +68,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Idle()
     {
+        anim.SetBool("Idle", true);
         if(!_walkPointSet)
             FindWalkPoint();
         else
@@ -91,6 +93,7 @@ public class EnemyAI : MonoBehaviour
 
     private void ChasePlayer()
     {
+        anim.SetBool("Idle", false);
         agent.SetDestination(playerObj.transform.position);
         Debug.Log("Chasing");
     }
@@ -103,7 +106,7 @@ public class EnemyAI : MonoBehaviour
 
         if (!_hasAttacked)
         {
-            //anim.SetTrigger("Hit");
+            anim.SetTrigger("Hit");
             Hit();
             _hasAttacked = true;
         }
@@ -123,6 +126,7 @@ public class EnemyAI : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Balls");
         if (!other.gameObject.CompareTag("Projectile")) return;
         
         var projectile = other.GetComponent<BaseProjectile>();
@@ -134,12 +138,19 @@ public class EnemyAI : MonoBehaviour
 
     private void Die()
     {
+        StartCoroutine(deathProcess());  
+    }
+
+    IEnumerator deathProcess()
+    {
         Destroy(agent);
-        //anim.SetTrigger("Death");
+        anim.SetTrigger("Die");
+        hitSFX.Play();
+        yield return new WaitForSeconds(3);
         Destroy(this.gameObject);
         isAlive = false;
-        hitSFX.Play();
     }
+
 
     private void ResetAttack()
     {
